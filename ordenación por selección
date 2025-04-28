@@ -1,6 +1,6 @@
 .data
 array:  .word  7, 6, 9, 2, 5   # Array de ejemplo
-n:      .word  5               # Número de elementos
+n:      .word  5               # NÃºmero de elementos
 msg1:   .asciiz "Array antes de ordenar:\n"
 msg2:   .asciiz "\nArray despues de ordenar:\n"
 
@@ -15,13 +15,13 @@ main:
 
     # Mostrar array original
     la $s0, array       # $s0 = inicio del array
-    lw $s1, n           # $s1 = número de elementos
-    li $t0, 0           # índice = 0
+    lw $s1, n           # $s1 = nÃºmero de elementos
+    li $t0, 0           # Ã­ndice = 0
 
 print_array_start:
     beq $t0, $s1, sort_start  # Si llegamos al final, saltar a ordenar
-    sll $t1, $t0, 2           # t1 = índice * 4 (offset)
-    add $t2, $s0, $t1         # Dirección del elemento
+    sll $t1, $t0, 2           # t1 = Ã­ndice * 4 (offset)
+    add $t2, $s0, $t1         # DirecciÃ³n del elemento
     lw $a0, 0($t2)            # Cargar el valor
 
     li $v0, 1                 # syscall para imprimir entero
@@ -35,30 +35,30 @@ print_array_start:
     addi $t0, $t0, 1
     j print_array_start
 
-# Ordenar array usando selección
+# Ordenar array usando selecciÃ³n
 sort_start:
-    la $s0, array       # $s0 = dirección base del array
-    lw $s1, n           # $s1 = número de elementos
-    sub $s2, $s1, 1     # $s2 = índice final (n-1)
+    la $s0, array       # $s0 = direcciÃ³n base del array
+    lw $s1, n           # $s1 = nÃºmero de elementos
+    sub $s2, $s1, 1     # $s2 = Ã­ndice final (n-1)
 
     la $a0, array
     sll $a2, $s2, 2     # (n-1) * 4
-    add $a1, $s0, $a2   # a1 = puntero al último elemento
+    add $a1, $s0, $a2   # a1 = puntero al Ãºltimo elemento
 
 sort:
     beq $a0, $a1, after_sort   # Si inicio == fin, terminar
 
     jal max    # Llamar al procedimiento max
 
-    lw $t0, 0($a1)    # Cargar último elemento
-    sw $t0, 0($v0)    # Copiar último elemento donde estaba el máximo
-    sw $v1, 0($a1)    # Poner el valor máximo en el último lugar
+    lw $t0, 0($a1)    # Cargar Ãºltimo elemento
+    sw $t0, 0($v0)    # Copiar Ãºltimo elemento donde estaba el mÃ¡ximo
+    sw $v1, 0($a1)    # Poner el valor mÃ¡ximo en el Ãºltimo lugar
 
-    addi $a1, $a1, -4 # Mover el puntero final una posición atrás
+    addi $a1, $a1, -4 # Mover el puntero final una posiciÃ³n atrÃ¡s
     j sort
 
 after_sort:
-    # Mostrar mensaje después de ordenar
+    # Mostrar mensaje despuÃ©s de ordenar
     li $v0, 4
     la $a0, msg2
     syscall
@@ -91,16 +91,16 @@ done:
 
 # --------------------------------------------------------
 # Procedimiento max
-# Entrada: $a0 = inicio de sección
-#          $a1 = fin de sección
-# Salida:  $v0 = dirección del máximo
-#          $v1 = valor máximo
+# Entrada: $a0 = inicio de secciÃ³n
+#          $a1 = fin de secciÃ³n
+# Salida:  $v0 = direcciÃ³n del mÃ¡ximo
+#          $v1 = valor mÃ¡ximo
 # --------------------------------------------------------
 
 max:
-    move $t0, $a0       # $t0 = dirección actual
-    lw $t1, 0($t0)      # $t1 = valor máximo inicial
-    move $t2, $t0       # $t2 = dirección del máximo
+    move $t0, $a0       # $t0 = direcciÃ³n actual
+    lw $t1, 0($t0)      # $t1 = valor mÃ¡ximo inicial
+    move $t2, $t0       # $t2 = direcciÃ³n del mÃ¡ximo
 
 max_loop:
     addi $t0, $t0, 4    # Avanzar al siguiente elemento
@@ -110,13 +110,13 @@ max_loop:
     slt $t4, $t1, $t3
     beq $t4, $zero, max_loop
 
-    move $t1, $t3       # Actualizar máximo
+    move $t1, $t3       # Actualizar mÃ¡ximo
     move $t2, $t0
     j max_loop
 
 max_done:
-    move $v0, $t2       # Dirección del máximo
-    move $v1, $t1       # Valor máximo
+    move $v0, $t2       # DirecciÃ³n del mÃ¡ximo
+    move $v1, $t1       # Valor mÃ¡ximo
     jr $ra
 
 .data
